@@ -9,8 +9,9 @@ import os
 import sqlite3
 from settings import ERROR_COLOR, DB_NAME
 import add_category
+import show_categories
 
-
+# TODO: Добавить кнопочки для show_categories
 class MainWindow(tk.Tk):
     """Класс главного окна программы."""
 
@@ -46,19 +47,25 @@ class MainWindow(tk.Tk):
         # Создаём виджеты
         self.add_category_button = tk.Button(text='Добавить новую '
                                                   'категорию расходов')
+        self.show_categories_button = tk.Button(text='Посмотреть существующие '
+                                                     'категории')
         self.exit_button = tk.Button(self, text='ВЫХОД', bg=ERROR_COLOR,
                                      command=self.quit)
 
         # Привязываем обработчики
         self.add_category_button.bind('<Button-1>', lambda event: self._show_add_category_screen())
+        self.show_categories_button.bind('<Button-1>', lambda event: self._show_show_categories_screen())
 
         # Пакуем виджеты
         self.add_category_button.pack(expand=3)
+        self.show_categories_button.pack(expand=3)
         self.exit_button.pack(expand=3)
 
     def _show_add_category_screen(self):
         self.add_category_screen = add_category.AddCategory(self.db_connection)
 
+    def _show_show_categories_screen(self):
+        self.show_categories_screen = show_categories.ShowCategories(self.db_connection)
 
 def main():
     """Функция, запускающая весь код."""
