@@ -18,7 +18,7 @@ class AddCategory(tk.Toplevel):
             self.geometry(f'{width}x{height}')
         self.title('Экран добавления категории')
         self.db_connection = db_connection
-        self.add_widgets()
+        self._add_widgets()
 
     def _get_name(self, label_widget, entry_widget):
         """
@@ -97,7 +97,7 @@ class AddCategory(tk.Toplevel):
         self.db_connection.commit()
         self.destroy()
 
-    def add_widgets(self):
+    def _add_widgets(self):
         """Метод, добавляющий все необходимые виджеты на экран."""
         # Создаём виджеты.
         self.name_label = tk.Label(self, text='Введите название'
