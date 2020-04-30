@@ -116,7 +116,7 @@ class AddCategory(tk.Toplevel):
                                                                               self.value_label,
                                                                               self.value_entry))
 
-        # Пакуем виджеты
+        # Пакуем виджеты.
         self.name_label.pack(expand=3, side=tk.TOP)
         self.name_entry.pack(expand=3, side=tk.TOP)
         self.value_label.pack(expand=3, side=tk.TOP)
