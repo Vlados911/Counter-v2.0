@@ -44,6 +44,8 @@ class ShowCategories(tk.Toplevel):
         if list_widget.curselection():
             # Выводим информацию о категории в текстовое поле.
             index = list_widget.curselection()[0]
+            text_widget.delete(1.0, tk.END)
+            text_widget.delete(2.0, tk.END)
             text_widget.insert(1.0, f'Имя категории: {elements[index][0]}')
             text_widget.insert(2.0, f'\nЗначение категории: {elements[index][1]}')
         else:
