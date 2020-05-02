@@ -2,6 +2,7 @@
 
 import tkinter as tk
 from settings import ERROR_COLOR
+from checker import *
 
 
 class AddCategory(tk.Toplevel):
@@ -20,70 +21,11 @@ class AddCategory(tk.Toplevel):
         self.db_connection = db_connection
         self._add_widgets()
 
-    def _get_name(self, label_widget, entry_widget):
-        """
-        Метод, который проверяет поле ввода для названия категории.
-
-        Принимает Label (для вывода ошибок) и Entry (для получения вводных данных).
-        Если название введено в корректном формате, то возвращает название.
-        Иначе возвращает False.
-        """
-        if len(entry_widget.get()) == 0:
-            # Не пустая ли строка ввода?
-            label_widget.config(text='Введите название категории!',
-                                bg=ERROR_COLOR)
-            return False
-
-        if not entry_widget.get().replace(' ', '').isalpha():
-            # Содержит ли строка только буквы?
-            label_widget.config(text='Название категории должно содержать'
-                                     ' только буквы и пробелы.',
-                                bg=ERROR_COLOR)
-            return False
-
-        # Подключаем базу данных и получаем список названий существующих категорий.
-        cursor = self.db_connection.cursor()
-        names = cursor.execute('SELECT name FROM categories').fetchall()
-        names = [name[0] for name in names]
-
-        # Проверяем, не существует ли уже категория с таким именем
-        if entry_widget.get() in names:
-            label_widget.config(text='Такая категория уже существует,'
-                                     ' попробуйте изменить название.',
-                                bg=ERROR_COLOR)
-            return False
-
-        # Возвращаем содержимое строки ввода, если ни одно из условий не выполнилось.
-        return entry_widget.get()
-
-    def _get_value(self, label_widget, entry_widget):
-        """
-        Метод, который проверяет поле ввода для начального значения категории.
-
-        Принимает Label (для вывода ошибок) и Entry (для получения вводных данных).
-        Если значение введено в корректном формате, то возвращает числовое значение.
-        Иначе возвращает False.
-        """
-        if len(entry_widget.get()) == 0:
-            # Не пустая ли строка ввода?
-            label_widget.config(text='Введите начальное значение для категории!',
-                                bg=ERROR_COLOR)
-            return False
-
-        if not entry_widget.get().isdigit():
-            # Содержит ли строка только цифры?
-            label_widget.config(text='Значение может быть только числовым!',
-                                bg=ERROR_COLOR)
-            return False
-
-        # Возвращаем содержимое строки ввода, если ни одно из условий не выполнилось.
-        # Перед этим превращаем содержимое в число.
-        return int(entry_widget.get())
-
     def _add_category(self, name_label, name_entry, value_label, value_entry):
-        # Получаем пользовательские значения
-        name = self._get_name(name_label, name_entry)
-        value = self._get_value(value_label, value_entry)
+        # Получаем пользовательские значения с помощью функции check,
+        # описанной в checker.py
+        name = check(name_label, name_entry, 'name')
+        value = check(value_label, value_entry, 'value')
 
         if not name or not value:
             # Если название или значение введено в неправильном формате,
@@ -92,6 +34,14 @@ class AddCategory(tk.Toplevel):
 
         # Создаём курсор для взаимодействия с базой данных.
         cursor = self.db_connection.cursor()
+
+        elements = cursor.execute('SELECT name FROM categories').fetchall()
+        elements = [element[0] for element in elements]
+
+        if name in elements:
+            name_label.config(text='Такое имя уже существует, попробуйте другое',
+                              bg=ERROR_COLOR)
+            return
 
         cursor.execute(f'INSERT INTO categories VALUES("{name}", {value})')
         self.db_connection.commit()

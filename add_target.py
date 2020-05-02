@@ -2,6 +2,7 @@
 
 import tkinter as tk
 from settings import ERROR_COLOR
+from checker import *
 
 
 class AddTarget(tk.Toplevel):
@@ -14,37 +15,10 @@ class AddTarget(tk.Toplevel):
             self.geometry(f'{width}x{height}')
         self._add_widgets()
 
-    def _get_name(self, name_label, name_entry):
-        if len(name_entry.get()) == 0:
-            name_label.config(text='Вы не ввели название',
-                              bg=ERROR_COLOR)
-            return
-        
-        if not name_entry.get().replace(' ', '').isalpha():
-            name_label.config(text='Вы ввели название в неправильно формате',
-                              bg=ERROR_COLOR)
-            return
-
-        return name_entry.get()
-
-    def _get_value(self, value_label, value_entry):
-        if len(value_entry.get()) == 0:
-            value_label.config(text='Вы не ввели значение',
-                               bg=ERROR_COLOR)
-
-            return
-
-        if not value_entry.get().isdigit():
-            value_label.config(text='Значение должно состоять только из цифр',
-                               bg=ERROR_COLOR)
-            return
-
-        return int(value_entry.get())
-
     def _add_target(self, name_label, name_entry, value_label, value_entry):
         # Получаем данные, введённые пользователем.
-        name = self._get_name(name_label, name_entry)
-        value = self._get_value(value_label, value_entry)
+        name = check(name_label, name_entry, 'name')
+        value = check(value_label, value_entry, 'value')
 
         if not name or not value:
             # Если название или значение введено в неправильном формате,
@@ -56,12 +30,12 @@ class AddTarget(tk.Toplevel):
         # Получаем названия уже созданных целей.
         names = cursor.execute('SELECT name FROM targets').fetchall()
         names = [name[0] for name in names]
-        
+
         if name in names:
             name_label.config(text='Цель с таким названием уще существует.',
                               bg=ERROR_COLOR)
             return
-        
+
         cursor.execute(f'INSERT INTO targets VALUES ("{name}", {0}, {value})')
         # Сохраняем изменения.
         self.db_connection.commit()
