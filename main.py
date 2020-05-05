@@ -11,8 +11,9 @@ from settings import ERROR_COLOR, DB_NAME
 import add_category
 import show_categories
 import add_target
+import edit_target
 
-# TODO: Прописать комментарии для всех защищённых методов во всем модулях.
+
 class MainWindow(tk.Tk):
     """Класс главного окна программы."""
 
@@ -53,28 +54,23 @@ class MainWindow(tk.Tk):
         self.show_categories_button = tk.Button(text='Посмотреть существующие '
                                                      'категории')
         self.add_target_button = tk.Button(text='Добавить новую цель')
+        self.edit_target_button = tk.Button(text='Изменить цель')
         self.exit_button = tk.Button(self, text='ВЫХОД', bg=ERROR_COLOR,
                                      command=self.quit)
 
         # Привязываем обработчики.
-        self.add_category_button.bind('<Button-1>', lambda event: self._show_add_category_screen())
-        self.show_categories_button.bind('<Button-1>', lambda event: self._show_show_categories_screen())
-        self.add_target_button.bind('<Button-1>', lambda event: self._show_add_target_screen())
+        self.add_category_button.bind('<Button-1>', lambda event: add_category.AddCategory(self.db_connection))
+        self.show_categories_button.bind('<Button-1>', lambda event: show_categories.ShowCategories(self.db_connection))
+        self.add_target_button.bind('<Button-1>', lambda event: add_target.AddTarget(self.db_connection))
+        self.edit_target_button.bind('<Button-1>', lambda event: edit_target.EditTarget(self.db_connection))
 
         # Пакуем виджеты.
         self.add_category_button.pack(expand=3)
         self.show_categories_button.pack(expand=3)
         self.add_target_button.pack(expand=3)
+        self.edit_target_button.pack(expand=3)
         self.exit_button.pack(expand=3)
 
-    def _show_add_category_screen(self):
-        self.add_category_screen = add_category.AddCategory(self.db_connection)
-
-    def _show_show_categories_screen(self):
-        self.show_categories_screen = show_categories.ShowCategories(self.db_connection)
-
-    def _show_add_target_screen(self):
-        self.add_target_screen = add_target.AddTarget(self.db_connection)
 
 def main():
     """Функция, запускающая весь код."""
