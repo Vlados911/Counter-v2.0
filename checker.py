@@ -2,6 +2,7 @@
 
 from settings import ERROR_COLOR
 
+
 def check(label_widget, entry_widget, check_type):
     """Функция для проверки пользовательского ввода.
 
@@ -13,7 +14,7 @@ def check(label_widget, entry_widget, check_type):
         # Проверка числового значения.
         if len(entry_widget.get()) == 0:
             # Если строка пустая, то возвращаем None.
-            label_widget.config(text='Вы не ввели название', bg=ERROR_COLOR)
+            label_widget.config(text='Вы не ввели значение', bg=ERROR_COLOR)
             return
 
         if not entry_widget.get().isdigit():
