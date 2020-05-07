@@ -3,7 +3,7 @@
 from settings import ERROR_COLOR
 
 
-def check(label_widget, entry_widget, check_type):
+def check(check_type, label=None, entry=None, lbox=None):
     """Функция для проверки пользовательского ввода.
 
     label_widget - объект типа tkinter.Label, в который будут передаваться сообщения об ошибках.
@@ -12,31 +12,36 @@ def check(label_widget, entry_widget, check_type):
     """
     if check_type == 'value':
         # Проверка числового значения.
-        if len(entry_widget.get()) == 0:
+        if len(entry.get()) == 0:
             # Если строка пустая, то возвращаем None.
-            label_widget.config(text='Вы не ввели значение', bg=ERROR_COLOR)
+            label.config(text='Вы не ввели значение', bg=ERROR_COLOR)
             return
 
-        if not entry_widget.get().isdigit():
-            # Если строка не состоит только из цифр, то возвращаем None.
-            label_widget.config(text='Значение должно состоять только из цифр',
-                                bg=ERROR_COLOR)
-            return
+        try:
+            return int(entry.get())
+        except ValueError:
+            label.config(text='Вы ввели не число', bg=ERROR_COLOR)
 
         # Если всё хорошо, то возвращаем пользовательский ввод, приведённый к числу.
-        return int(entry_widget.get())
     elif check_type == 'name':
         # Проверка строкового значения.
-        if len(entry_widget.get()) == 0:
+        if len(entry.get()) == 0:
             # Если строка пустая, то возвращаем None.
-            label_widget.config(text='Вы не ввели название', bg=ERROR_COLOR)
+            label.config(text='Вы не ввели название', bg=ERROR_COLOR)
             return
 
-        if not entry_widget.get().replace(' ', '').isalpha():
+        if not entry.get().replace(' ', '').isalpha():
             # Если строка не состоит из букв и пробелов, то возвращаем None.
-            label_widget.config(text='Вы ввели название в неправильном формате',
+            label.config(text='Вы ввели название в неправильном формате',
                                 bg=ERROR_COLOR)
             return
 
         # Если всё хорошо, то возвращаем строку, введённую пользователем.
-        return entry_widget.get()
+        return entry.get()
+    elif check_type == 'selection':
+        selection = lbox.curselection()
+        if selection:
+            return selection[0]
+        else:
+            label.config(text='Вы не выбрали ничего в списке ниже!', bg=ERROR_COLOR)
+            return

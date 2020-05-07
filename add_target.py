@@ -15,12 +15,12 @@ class AddTarget(tk.Toplevel):
             self.geometry(f'{width}x{height}')
         self._add_widgets()
 
-    def _add_target(self, name_label, name_entry, value_label, value_entry):
+    def _add_target(self):
         # Получаем данные, введённые пользователем.
-        name = check(name_label, name_entry, 'name')
-        value = check(value_label, value_entry, 'value')
+        name = check('name', self.name_label, self.name_entry)
+        value = check('value', self.target_label, self.target_entry)
 
-        if not name or not value:
+        if name is None or value is None:
             # Если название или значение введено в неправильном формате,
             # то прерываем выполнение.
             return
@@ -32,7 +32,7 @@ class AddTarget(tk.Toplevel):
         names = [name[0] for name in names]
 
         if name in names:
-            name_label.config(text='Цель с таким названием уще существует.',
+            self.name_label.config(text='Цель с таким названием уще существует.',
                               bg=ERROR_COLOR)
             return
 
@@ -52,10 +52,7 @@ class AddTarget(tk.Toplevel):
                                      command=self.destroy)
 
         # Привязываем обработчкики событий.
-        self.enter_button.bind('<Button-1>', lambda event: self._add_target(self.name_label,
-                                                                            self.name_entry,
-                                                                            self.target_label,
-                                                                            self.target_entry))
+        self.enter_button.bind('<Button-1>', lambda event: self._add_target())
 
         # Пакуем виджеты.
         self.name_label.pack()

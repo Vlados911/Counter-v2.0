@@ -7,11 +7,13 @@ Counter - удобное приложение для подсчёта ваших
 import tkinter as tk
 import os
 import sqlite3
-from settings import ERROR_COLOR, DB_NAME
-import add_category
-import show_categories
-import add_target
-import edit_target
+
+from settings import *
+from add_category import *
+from edit_category import *
+from show_categories import *
+from add_target import *
+from edit_target import *
 
 
 class MainWindow(tk.Tk):
@@ -49,23 +51,23 @@ class MainWindow(tk.Tk):
     def add_widgets(self):
         """Метод, добавляющий виджеты на главный экран."""
         # Создаём виджеты.
-        self.add_category_button = tk.Button(text='Добавить новую '
-                                                  'категорию расходов')
-        self.show_categories_button = tk.Button(text='Посмотреть существующие '
-                                                     'категории')
+        self.add_category_button = tk.Button(text='Добавить новую категорию расходов')
+        self.edit_category_button = tk.Button(text='Изменить категорию')
+        self.show_categories_button = tk.Button(text='Посмотреть существующие категории')
         self.add_target_button = tk.Button(text='Добавить новую цель')
         self.edit_target_button = tk.Button(text='Изменить цель')
-        self.exit_button = tk.Button(self, text='ВЫХОД', bg=ERROR_COLOR,
-                                     command=self.quit)
+        self.exit_button = tk.Button(self, text='ВЫХОД', bg=ERROR_COLOR, command=self.quit)
 
         # Привязываем обработчики.
-        self.add_category_button.bind('<Button-1>', lambda event: add_category.AddCategory(self.db_connection))
-        self.show_categories_button.bind('<Button-1>', lambda event: show_categories.ShowCategories(self.db_connection))
-        self.add_target_button.bind('<Button-1>', lambda event: add_target.AddTarget(self.db_connection))
-        self.edit_target_button.bind('<Button-1>', lambda event: edit_target.EditTarget(self.db_connection))
+        self.add_category_button.bind('<Button-1>', lambda _: AddCategory(self.db_connection))
+        self.edit_category_button.bind('<Button-1>', lambda _: EditCategory(self.db_connection))
+        self.show_categories_button.bind('<Button-1>', lambda _: ShowCategories(self.db_connection))
+        self.add_target_button.bind('<Button-1>', lambda _: AddTarget(self.db_connection))
+        self.edit_target_button.bind('<Button-1>', lambda _: EditTarget(self.db_connection))
 
         # Пакуем виджеты.
         self.add_category_button.pack(expand=3)
+        self.edit_category_button.pack(expand=3)
         self.show_categories_button.pack(expand=3)
         self.add_target_button.pack(expand=3)
         self.edit_target_button.pack(expand=3)

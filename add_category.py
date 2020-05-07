@@ -21,11 +21,11 @@ class AddCategory(tk.Toplevel):
         self.db_connection = db_connection
         self._add_widgets()
 
-    def _add_category(self, name_label, name_entry, value_label, value_entry):
+    def _add_category(self):
         # Получаем пользовательские значения с помощью функции check,
         # описанной в checker.py
-        name = check(name_label, name_entry, 'name')
-        value = check(value_label, value_entry, 'value')
+        name = check('name', self.name_label, self.name_entry)
+        value = check('value', self.value_label, self.value_entry)
 
         if not name or not value:
             # Если название или значение введено в неправильном формате,
@@ -39,7 +39,7 @@ class AddCategory(tk.Toplevel):
         elements = [element[0] for element in elements]
 
         if name in elements:
-            name_label.config(text='Такое имя уже существует, попробуйте другое',
+            self.name_label.config(text='Такое имя уже существует, попробуйте другое',
                               bg=ERROR_COLOR)
             return
 
@@ -61,10 +61,7 @@ class AddCategory(tk.Toplevel):
                                      command=self.destroy)
 
         # Привязываем обработчики.
-        self.enter_button.bind('<Button-1>', lambda event: self._add_category(self.name_label,
-                                                                              self.name_entry,
-                                                                              self.value_label,
-                                                                              self.value_entry))
+        self.enter_button.bind('<Button-1>', lambda event: self._add_category())
 
         # Пакуем виджеты.
         self.name_label.pack(expand=3, side=tk.TOP)

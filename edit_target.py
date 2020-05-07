@@ -16,18 +16,11 @@ class EditTarget(tk.Toplevel):
         # Создаём объект типа Cursor для взаимодействия с базой данных.
         cursor = self.db_connection.cursor()
 
-    def _update_target(self, list_label, list_listbox, value_label, value_entry):
-        selection = None
-        if list_listbox.curselection():
-            selection = list_listbox.curselection()[0]
-        else:
-            list_label.config(text='Вы ничего не выбрали!',
-                              bg=ERROR_COLOR)
-            return
-
+    def _update_target(self):
         # Получаем значение, введённое пользователем.
-        value = check(value_label, value_entry, 'value')
-        if not value:
+        value = check('value', self.value_label, self.value_entry)
+        selection = check('selection', label=self.list_label, lbox=self.targets_list)
+        if value is None or selection is None:
             return
 
         # Создаём курсор для взаимодействия с базой данных.
@@ -53,10 +46,7 @@ class EditTarget(tk.Toplevel):
         self.exit_button = tk.Button(self, text='ВЫХОД', bg=ERROR_COLOR, command=self.destroy)
 
         # Привязываем обработчики событий
-        self.enter_button.bind('<Button-1>', lambda event: self._update_target(self.list_label,
-                                                                               self.targets_list,
-                                                                               self.value_label,
-                                                                               self.value_entry))
+        self.enter_button.bind('<Button-1>', lambda event: self._update_target())
 
         # Пакуем виджеты
         self.list_label.pack()
