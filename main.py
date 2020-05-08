@@ -8,12 +8,12 @@ import tkinter as tk
 import os
 import sqlite3
 
-from settings import *
+from config import *
 from add_category import *
 from edit_category import *
-from show_categories import *
 from add_target import *
 from edit_target import *
+from show_info import *
 
 
 class MainWindow(tk.Tk):
@@ -53,24 +53,24 @@ class MainWindow(tk.Tk):
         # Создаём виджеты.
         self.add_category_button = tk.Button(text='Добавить новую категорию расходов')
         self.edit_category_button = tk.Button(text='Изменить категорию')
-        self.show_categories_button = tk.Button(text='Посмотреть существующие категории')
         self.add_target_button = tk.Button(text='Добавить новую цель')
         self.edit_target_button = tk.Button(text='Изменить цель')
+        self.show_info_button = tk.Button(text='Показать информацию')
         self.exit_button = tk.Button(self, text='ВЫХОД', bg=ERROR_COLOR, command=self.quit)
 
         # Привязываем обработчики.
         self.add_category_button.bind('<Button-1>', lambda _: AddCategory(self.db_connection))
         self.edit_category_button.bind('<Button-1>', lambda _: EditCategory(self.db_connection))
-        self.show_categories_button.bind('<Button-1>', lambda _: ShowCategories(self.db_connection))
         self.add_target_button.bind('<Button-1>', lambda _: AddTarget(self.db_connection))
         self.edit_target_button.bind('<Button-1>', lambda _: EditTarget(self.db_connection))
+        self.show_info_button.bind('<Button-1>', lambda _: ShowInfo(self.db_connection))
 
         # Пакуем виджеты.
         self.add_category_button.pack(expand=3)
         self.edit_category_button.pack(expand=3)
-        self.show_categories_button.pack(expand=3)
         self.add_target_button.pack(expand=3)
         self.edit_target_button.pack(expand=3)
+        self.show_info_button.pack(expand=3)
         self.exit_button.pack(expand=3)
 
 
