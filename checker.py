@@ -1,6 +1,6 @@
 """Модуль для проверки пользовательского ввода."""
 
-from settings import ERROR_COLOR
+from config import ERROR_COLOR
 
 
 def check(check_type, label=None, entry=None, lbox=None):

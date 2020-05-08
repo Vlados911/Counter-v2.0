@@ -1,5 +1,5 @@
 import tkinter as tk
-from settings import ERROR_COLOR
+from config import ERROR_COLOR
 from checker import check
 
 
